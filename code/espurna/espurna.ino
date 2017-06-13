@@ -22,10 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "config/all.h"
 #include <EEPROM.h>
-#include <BlynkSimpleEsp8266.h>
-#define BLYNK_PRINT Serial
 
-char auth[] = "d80682aa4d8d43b8aee217d0b1f0f86b";
 
 // -----------------------------------------------------------------------------
 // METHODS
@@ -159,76 +156,6 @@ void welcome() {
 
 }
 
-//Blynk shit
-BlynkTimer timer;
-
-WidgetLED led0(V0);
-
-bool ledStatusBlynk = false;
-int sliderValue = 0;
-int sliderValueR = 0;
-int sliderValueG = 0;
-int sliderValueB = 0;
-
-long assembledColor = 0;
-
-void timerTick()
-{
-  if (ledStatusBlynk == 0){
-    Serial.println("LED on V0 is OFF");
-    led0.off();
-    return;
-    } else {    
-      Serial.println("LED on V0 is ON");
-      led0.on();
-    }
-}
-
-
-long newColor(){
-  int r = sliderValueR << 16;
-  int g = sliderValueG << 8; 
-  int b = sliderValueB;
-
-  long combo = r + g + b;
-  return combo;
-}
-
-//RED
-BLYNK_WRITE(V2){  
-  sliderValueR = param.asInt();
-  long c = newColor();
-  String s = "#" + String(c,HEX);
-  Serial.println("new Color: #"+ s);
-  led0.setColor(s);
-}
-
-//GREEN
-BLYNK_WRITE(V3){
-  sliderValueG = param.asInt();
-  long c = newColor();
-  String s = "#" + String(c,HEX);
-  Serial.println("new Color: #"+ s);
-  led0.setColor(s);
-}
-
-//BLUE
-BLYNK_WRITE(V4){
-  sliderValueB = param.asInt();
-  long c = newColor();
-  String s = "#" + String(c,HEX);
-  Serial.println("new Color: #"+ s);
-  led0.setColor(s);
-}
-  
-BLYNK_WRITE(V1)
-{
-  ledStatusBlynk = param.asInt(); // assigning incoming value from pin V1 to a variable
-  Serial.print("V1 value is: ");
-  Serial.println(ledStatusBlynk);
-}
-//end blynk shit
-
 
 void setup() {
 
@@ -284,9 +211,13 @@ void setup() {
         powerMonitorSetup();
     #endif
 
+    #if ENABLE_BLYNK
+      blynkSetup();
+    #endif
+
     // Prepare configuration for version 2.0
     hwUpwardsCompatibility();
-    Blynk.config(auth);
+    
 
 }
 
@@ -328,8 +259,8 @@ void loop() {
     #if ENABLE_EMON
         powerMonitorLoop();
     #endif
-
-    Blynk.run();
-
+    #if ENABLE_BLYNK
+       blynkLoop();
+    #endif
 
 }

@@ -39,7 +39,8 @@
 //#define ENABLE_EMON           1
 //#define ENABLE_HLW8018        1
 //#define ENABLE_RF             1
-#define ENABLE_FAUXMO         0
+#define ENABLE_FAUXMO        1
+#define ENABLE_BLYNK	     1
 //#define ENABLE_NOFUSS         1
 //#define ENABLE_DOMOTICZ       0
 //#define ENABLE_ANALOG         1
