@@ -6,7 +6,7 @@
 //should get our auth tokens from the web config
 //and do real handling of the relay based on the sonoff boilerplate code
 
-char auth[] = "d80682aa4d8d43b8aee217d0b1f0f86b";
+//char auth[] = "d80682aa4d8d43b8aee217d0b1f0f86b";
 
 BlynkTimer timer;
 
@@ -20,9 +20,20 @@ int sliderValueB = 0;
 
 long assembledColor = 0;
 
+void blynkConfigure() {
+	  //get the blynkAuth setting
+		String blynkToken = getSetting("blynkToken", BLYNK_TOKEN);
+		String blynkServer = getSetting("blynkServer",BLYNK_SERVER);
+		int blynkPort = getSetting("blynkPort", BLYNK_PORT);
+    //fauxmo.enable(getSetting("fauxmoEnabled", FAUXMO_ENABLED).toInt() == 1);
+		Blynk.config(blynkToken, blynkServer, blynkPort);
+
+}
+
+
 void blynkSetup()
 {
-	Blynk.config(auth);
+	blynkConfigure();
   while (Blynk.connect() == false) {
   }
 }
@@ -41,7 +52,7 @@ void timerTick()
     //DEBUG_MSG_P(PSTR("[blynk] LED on V0 : %s\n"), ledStatusBlynk);
     //led0.off();
     return;
-    } else {    
+    } else {
       //led0.on();
     }
 }
@@ -49,7 +60,7 @@ void timerTick()
 
 long newColor(){
   int r = sliderValueR << 16;
-  int g = sliderValueG << 8; 
+  int g = sliderValueG << 8;
   int b = sliderValueB;
 
   long combo = r + g + b;
@@ -58,7 +69,7 @@ long newColor(){
 
 
 //RED
-BLYNK_WRITE(V2){  
+BLYNK_WRITE(V2){
   sliderValueR = param.asInt();
   long c = newColor();
   String s = "#" + String(c,HEX);
@@ -83,7 +94,7 @@ BLYNK_WRITE(V4){
   //DEBUG_MSG_P(PSTR("[blynk] new Color B : %d\n"), sliderValueB);
   //led0.setColor(s);
 }
-  
+
 BLYNK_WRITE(V1)
 {
   ledStatusBlynk = param.asInt(); // assigning incoming value from pin V1 to a variable
