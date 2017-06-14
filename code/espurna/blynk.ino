@@ -1,6 +1,5 @@
 #ifdef ENABLE_BLYNK
 #include <SPI.h>
-#include <BlynkSimpleEsp8266.h>
 //#define BLYNK_PRINT Serial
 
 //should get our auth tokens from the web config
@@ -10,7 +9,7 @@
 
 BlynkTimer timer;
 
-//WidgetLED led0(V0);
+WidgetLED led0(V0);
 
 bool ledStatusBlynk = false;
 int sliderValue = 0;
@@ -22,9 +21,9 @@ long assembledColor = 0;
 
 void blynkConfigure() {
 	  //get the blynkAuth setting
-		String blynkToken = getSetting("blynkToken", BLYNK_TOKEN);
-		String blynkServer = getSetting("blynkServer",BLYNK_SERVER);
-		int blynkPort = getSetting("blynkPort", BLYNK_PORT);
+		char * blynkToken = strdup(getSetting("blynkToken", BLYNK_TOKEN).c_str());
+		char * blynkServer = strdup(getSetting("blynkServer",BLYNK_SERVER).c_str());
+		int blynkPort = getSetting("blynkPort", BLYNK_PORT).toInt();
     //fauxmo.enable(getSetting("fauxmoEnabled", FAUXMO_ENABLED).toInt() == 1);
 		Blynk.config(blynkToken, blynkServer, blynkPort);
 
@@ -34,8 +33,8 @@ void blynkConfigure() {
 void blynkSetup()
 {
 	blynkConfigure();
-  while (Blynk.connect() == false) {
-  }
+  //while (Blynk.connect() == false) {
+  //}
 }
 
 
@@ -49,11 +48,11 @@ void blynkLoop()
 void timerTick()
 {
   if (ledStatusBlynk == 0){
-    //DEBUG_MSG_P(PSTR("[blynk] LED on V0 : %s\n"), ledStatusBlynk);
-    //led0.off();
+    DEBUG_MSG_P(PSTR("[blynk] LED on V0 : %s\n"), ledStatusBlynk);
+    led0.off();
     return;
     } else {
-      //led0.on();
+      led0.on();
     }
 }
 
@@ -73,8 +72,8 @@ BLYNK_WRITE(V2){
   sliderValueR = param.asInt();
   long c = newColor();
   String s = "#" + String(c,HEX);
-  //DEBUG_MSG_P(PSTR("[blynk] new Color R : %d\n"), sliderValueR);
-  //led0.setColor(s);
+  DEBUG_MSG_P(PSTR("[blynk] new Color R : %d\n"), sliderValueR);
+  led0.setColor(s);
 }
 
 //GREEN
@@ -82,8 +81,8 @@ BLYNK_WRITE(V3){
   sliderValueG = param.asInt();
   long c = newColor();
   String s = "#" + String(c,HEX);
-  //DEBUG_MSG_P(PSTR("[blynk] new Color G : %d\n"), sliderValueG);
-  //led0.setColor(s);
+  DEBUG_MSG_P(PSTR("[blynk] new Color G : %d\n"), sliderValueG);
+  led0.setColor(s);
 }
 
 //BLUE
@@ -91,15 +90,16 @@ BLYNK_WRITE(V4){
   sliderValueB = param.asInt();
   long c = newColor();
   String s = "#" + String(c,HEX);
-  //DEBUG_MSG_P(PSTR("[blynk] new Color B : %d\n"), sliderValueB);
-  //led0.setColor(s);
+  DEBUG_MSG_P(PSTR("[blynk] new Color B : %d\n"), sliderValueB);
+  led0.setColor(s);
 }
 
 BLYNK_WRITE(V1)
 {
   ledStatusBlynk = param.asInt(); // assigning incoming value from pin V1 to a variable
-  //DEBUG_MSG_P(PSTR("[blynk] V1 value is : %d\n"), ledStatusBlynk);
+  DEBUG_MSG_P(PSTR("[blynk] V1 value is : %d\n"), ledStatusBlynk);
 }
 
 
 #endif
+

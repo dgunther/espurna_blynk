@@ -23,6 +23,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "config/all.h"
 #include <EEPROM.h>
 
+#include <BlynkSimpleEsp8266.h>
+
+
 
 // -----------------------------------------------------------------------------
 // METHODS
@@ -264,3 +267,4 @@ void loop() {
     #endif
 
 }
+

@@ -22,3 +22,4 @@ template<typename T> void domoticzSend(const char * key, T nvalue) {
 }
 
 #endif
+
