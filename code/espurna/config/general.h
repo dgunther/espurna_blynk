@@ -283,3 +283,18 @@
 // this device should be discoberable and respond to Alexa commands.
 // Both ENABLE_FAUXMO and fauxmoEnabled should be 1 for Alexa support to work.
 #define FAUXMO_ENABLED          1
+
+// -----------------------------------------------------------------------------
+// BLYNK
+// -----------------------------------------------------------------------------
+
+// This setting defines whether Blynk support should be built into the firmware
+#ifndef ENABLE_BLYNK
+    #define ENABLE_BLYNK       1
+#endif
+
+
+#define BLYNK_ENABLED          1
+#define BLYNK_TOKEN           "d80682aa4d8d43b8aee217d0b1f0f86b"
+#define BLYNK_SERVER          "cloud.blynk.cc"
+#define BLYNK_PORT            8442
