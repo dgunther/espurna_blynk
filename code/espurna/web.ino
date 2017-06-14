@@ -498,6 +498,14 @@ void _wsStart(uint32_t client_id) {
             root["fauxmoEnabled"] = getSetting("fauxmoEnabled", FAUXMO_ENABLED).toInt() == 1;
         #endif
 
+        #if ENABLE_BLYNK
+            root["blynkVisible"] = 1;
+            root["blynkToken"] = getSetting("blynkToken",BLYNK_TOKEN);
+            root["blynkServer"] = getSetting("blynkServer", BLYNK_SERVER);
+            root["blynkPort"] = getSetting("blynkPort", BLYNK_PORT).toInt();
+
+        #endif
+
         #if ENABLE_DS18B20
             root["dsVisible"] = 1;
             root["dsTmp"] = getDSTemperatureStr();
@@ -907,6 +915,7 @@ void webSetup() {
 
     // Serve home (basic authentication protection)
     #if EMBEDDED_WEB
+        DEBUG_MSG_P(PSTR("[WEBSERVER] Using EMBEDDED_WEB\n"));
         _server->on("/index.html", HTTP_GET, _onHome);
     #endif
     _server->on("/config", HTTP_GET, _onGetConfig);
